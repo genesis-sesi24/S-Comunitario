@@ -1,0 +1,239 @@
+/* Estilos personalizados para La Batalla Sistema Comunitario */
+
+:root {
+    --lb-primary: #0891b2;
+    --lb-primary-dark: #0e7490;
+    --lb-secondary: #059669;
+    --lb-accent: #06b6d4;
+    --lb-success: #10b981;
+    --lb-warning: #f59e0b;
+    --lb-danger: #ef4444;
+    --lb-info: #3b82f6;
+}
+
+/* Mejorar el diseño general */
+.content-wrapper {
+    background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+}
+
+/* Tarjetas mejoradas */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--lb-primary), var(--lb-accent));
+    color: white;
+    border: none;
+    padding: 1.25rem 1.5rem;
+    font-weight: 600;
+}
+
+/* Small boxes mejoradas */
+.small-box {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.small-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+    pointer-events: none;
+}
+
+.small-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.small-box > .inner {
+    padding: 20px;
+}
+
+.small-box h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.small-box p {
+    font-size: 1rem;
+    margin: 0.5rem 0 0;
+    opacity: 0.95;
+}
+
+.small-box .icon {
+    font-size: 60px;
+    opacity: 0.2;
+}
+
+.small-box-footer {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 8px 0;
+    transition: all 0.3s ease;
+}
+
+.small-box:hover .small-box-footer {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+/* Colores personalizados para las cajas */
+.bg-lb-primary {
+    background: linear-gradient(135deg, #0891b2, #06b6d4) !important;
+}
+
+.bg-lb-success {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+}
+
+.bg-lb-warning {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24) !important;
+}
+
+.bg-lb-info {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa) !important;
+}
+
+.bg-lb-danger {
+    background: linear-gradient(135deg, #ef4444, #f87171) !important;
+}
+
+/* Botones mejorados */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--lb-primary), var(--lb-accent));
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--lb-primary-dark), var(--lb-primary));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--lb-secondary), var(--lb-success));
+    border: none;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+/* Logo mejorado */
+.brand-link {
+    transition: all 0.3s ease;
+}
+
+.brand-link:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.brand-image {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Mejoras en la barra lateral */
+.sidebar-dark-primary {
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+}
+
+.nav-sidebar .nav-link {
+    border-radius: 8px;
+    margin: 4px 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
+}
+
+.nav-sidebar .nav-link.active {
+    background: linear-gradient(135deg, var(--lb-primary), var(--lb-accent));
+    box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);
+}
+
+/* Header mejorado */
+.content-header {
+    padding: 1.5rem 0;
+}
+
+.content-header h1 {
+    font-weight: 700;
+    color: var(--lb-primary-dark);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Animaciones suaves */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-fade-in {
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Tarjetas de estadísticas */
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--lb-primary);
+}
+
+.stat-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.stat-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .small-box h3 {
+        font-size: 2rem;
+    }
+}
