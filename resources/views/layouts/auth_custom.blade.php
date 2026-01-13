@@ -12,7 +12,7 @@
 <body class="flex items-center justify-center min-h-screen bg-slate-100">
     <div class="w-[95%] max-w-5xl h-[80vh] min-h-[580px] flex bg-white rounded-[32px] overflow-hidden shadow-2xl">
         <!-- Image Side -->
-        <div class="hidden lg:flex lg:flex-[1.1] relative bg-gradient-to-br from-lb-primary to-lb-secondary text-white flex-col justify-end p-10 overflow-hidden">
+        <div class="hidden lg:flex lg:flex-[1.1] relative bg-gradient-to-br from-lb-primary via-lb-primary-dark to-lb-secondary text-white flex-col justify-end p-10 overflow-hidden">
             <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center opacity-40 mix-blend-overlay"></div>
             
             <div class="relative z-10 bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-xl">

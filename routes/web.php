@@ -17,4 +17,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::post('users/{user}/toggle-status', [App\Http\Controllers\UserController::class, 'toggleStatus'])
         ->name('users.toggle-status');
+
+    // Community Structure Routes
+    Route::resource('sectores', App\Http\Controllers\SectorController::class)->only(['index', 'store', 'destroy']);
+    Route::post('sectores/{sector}/calles', [App\Http\Controllers\SectorController::class, 'storeCalle'])->name('sectores.calles.store');
+    Route::delete('calles/{calle}', [App\Http\Controllers\SectorController::class, 'destroyCalle'])->name('calles.destroy');
 });

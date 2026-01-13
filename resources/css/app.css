@@ -1,10 +1,26 @@
 @import "tailwindcss";
 
 @theme {
-    --color-lb-primary: #0891b2;
-    --color-lb-primary-dark: #0e7490;
-    --color-lb-secondary: #059669;
-    --color-lb-accent: #06b6d4;
-
+    /* Professional Color Palette */
+    --color-lb-primary: #0f766e;
+    --color-lb-primary-light: #14b8a6;
+    --color-lb-primary-dark: #0d5e58;
+    --color-lb-secondary: #0891b2;
+    --color-lb-accent: #f59e0b;
+    --color-lb-gray: #64748b;
+    --color-lb-gray-light: #f1f5f9;
+    
+    /* Typography */
     --font-family-display: 'Poppins', var(--font-family-sans);
+    --font-family-sans: 'Inter', system-ui, sans-serif;
+}
+
+/* Custom utilities */
+.glass {
+    background: rgba(255, 255, 255, 0.8);
+   backdrop-filter: blur(10px);
+}
+
+.card-professional {
+    @apply bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-slate-100;
 }
