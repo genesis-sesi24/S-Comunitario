@@ -23,8 +23,11 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
-        'avatar',
         'is_active',
+        'familia_id',
+        'parentesco',
+        'cedula',
+        'fecha_nacimiento'
     ];
 
     /**
@@ -48,7 +51,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'fecha_nacimiento' => 'date',
         ];
+    }
+
+    public function familia(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Familia::class);
     }
 
     /**
