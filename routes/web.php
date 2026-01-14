@@ -22,4 +22,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('sectores', App\Http\Controllers\SectorController::class)->only(['index', 'store', 'destroy']);
     Route::post('sectores/{sector}/calles', [App\Http\Controllers\SectorController::class, 'storeCalle'])->name('sectores.calles.store');
     Route::delete('calles/{calle}', [App\Http\Controllers\SectorController::class, 'destroyCalle'])->name('calles.destroy');
+
+    // Family Module Routes
+    Route::resource('familias', App\Http\Controllers\FamiliaController::class);
+    
+    // Ficha Familiar Routes (nested under familias)
+    Route::resource('familias.fichas', App\Http\Controllers\FichaFamiliarController::class);
 });
