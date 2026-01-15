@@ -99,11 +99,11 @@
                         <span class="text-sm font-medium text-slate-700 text-center">Comunidad</span>
                     </a>
 
-                    <a href="#" class="flex flex-col items-center p-4 rounded-lg border-2 border-slate-200 hover:border-lb-primary hover:bg-lb-primary/5 transition group">
+                    <a href="{{ route('familias.index') }}" class="flex flex-col items-center p-4 rounded-lg border-2 border-slate-200 hover:border-lb-primary hover:bg-lb-primary/5 transition group">
                         <svg class="w-8 h-8 text-slate-400 group-hover:text-lb-primary mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
-                        <span class="text-sm font-medium text-slate-700 text-center">Fichas Familiares</span>
+                        <span class="text-sm font-medium text-slate-700 text-center">Familias</span>
                     </a>
 
                     <a href="#" class="flex flex-col items-center p-4 rounded-lg border-2 border-slate-200 hover:border-lb-primary hover:bg-lb-primary/5 transition group">
@@ -136,7 +136,7 @@
                             </div>
                         </div>
                         <div class="ml-3 flex-1">
-                            <p class="text-sm text-slate-900">Nueva ficha familiar registrada</p>
+                            <p class="text-sm text-slate-900">Nueva familia registrada</p>
                             <p class="text-xs text-slate-500 mt-1">Hace 2 horas</p>
                         </div>
                     </div>

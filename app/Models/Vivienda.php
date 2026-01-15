@@ -11,6 +11,7 @@ class Vivienda extends Model
     protected $fillable = [
         'calle_id',
         'numero_casa',
+        'tipo',
         'tipo_techo',
         'tipo_piso',
         'tipo_pared',

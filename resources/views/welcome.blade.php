@@ -89,7 +89,7 @@
                                     <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/>
                                 </svg>
                             </div>
-                            <h3 class="font-semibold text-slate-900 mb-2">Fichas Familiares</h3>
+                            <h3 class="font-semibold text-slate-900 mb-2">Familias</h3>
                             <p class="text-sm text-slate-600">Registro y seguimiento detallado de las familias de la comunidad.</p>
                         </div>
 

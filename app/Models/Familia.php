@@ -23,4 +23,9 @@ class Familia extends Model
     {
         return $this->hasMany(User::class, 'familia_id');
     }
+
+    public function fichaFamiliares(): HasMany
+    {
+        return $this->hasMany(FichaFamiliar::class);
+    }
 }
