@@ -87,29 +87,72 @@
                         <thead class="bg-slate-50">
                             <tr>
                                 <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Nº</th>
-                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Nombres y Apellidos</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Nombres</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Apellidos</th>
                                 <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Fecha Nac.</th>
-                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Edad</th>
                                 <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Sexo</th>
                                 <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Cédula</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Escolaridad</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Parentesco</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">G. Dispensarial</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Factores Riesgo/Patologías</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-slate-200">
-                            @foreach($familia->integrantes as $index => $integrante)
-                            <tr>
-                                <td class="px-3 py-2 whitespace-nowrap text-sm text-slate-900">{{ $index + 1 }}</td>
-                                <td class="px-3 py-2 whitespace-nowrap text-sm text-slate-900">{{ $integrante->name }} {{ $integrante->apellido }}</td>
-                                <td class="px-3 py-2 whitespace-nowrap text-sm text-slate-500">{{ $integrante->fecha_nacimiento ? \Carbon\Carbon::parse($integrante->fecha_nacimiento)->format('d/m/Y') : '-' }}</td>
-                                <td class="px-3 py-2 whitespace-nowrap text-sm text-slate-500">{{ $integrante->fecha_nacimiento ? \Carbon\Carbon::parse($integrante->fecha_nacimiento)->age : '-' }}</td>
-                                <td class="px-3 py-2 whitespace-nowrap text-sm text-slate-500">{{ $integrante->sexo ?? '-' }}</td>
-                                <td class="px-3 py-2 whitespace-nowrap text-sm text-slate-500">{{ $integrante->cedula }}</td>
-                            </tr>
-                            @endforeach
-                            @if($familia->integrantes->isEmpty())
-                            <tr>
-                                <td colspan="6" class="px-3 py-4 text-center text-sm text-gray-500">No hay integrantes registrados en esta familia.</td>
-                            </tr>
-                            @endif
+                            @php
+                                $numHabitantes = max($familia->numero_habitantes ?? 0, $familia->integrantes->count());
+                                if ($numHabitantes < 1) $numHabitantes = 1;
+                            @endphp
+                            @for($i = 0; $i < $numHabitantes; $i++)
+                                @php
+                                    $integrante = $familia->integrantes->get($i);
+                                @endphp
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-slate-900">{{ $i + 1 }}</td>
+                                    <td class="px-2 py-2">
+                                        @if($integrante)
+                                            <input type="hidden" name="integrantes[{{$i}}][id]" value="{{ $integrante->id }}">
+                                        @endif
+                                        <input type="text" name="integrantes[{{$i}}][name]" value="{{ old("integrantes.$i.name", $integrante->name ?? '') }}" 
+                                            class="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:ring-lb-primary">
+                                    </td>
+                                    <td class="px-2 py-2">
+                                        <input type="text" name="integrantes[{{$i}}][apellido]" value="{{ old("integrantes.$i.apellido", $integrante->apellido ?? '') }}" 
+                                            class="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:ring-lb-primary">
+                                    </td>
+                                    <td class="px-2 py-2">
+                                        <input type="date" name="integrantes[{{$i}}][fecha_nacimiento]" value="{{ old("integrantes.$i.fecha_nacimiento", $integrante?->fecha_nacimiento?->format('Y-m-d')) }}" 
+                                            class="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:ring-lb-primary">
+                                    </td>
+                                    <td class="px-2 py-2">
+                                        <select name="integrantes[{{$i}}][sexo]" class="w-full px-1 py-1 border border-slate-300 rounded text-xs focus:ring-lb-primary">
+                                            <option value="">...</option>
+                                            <option value="M" {{ old("integrantes.$i.sexo", $integrante->sexo ?? '') == 'M' ? 'selected' : '' }}>M</option>
+                                            <option value="F" {{ old("integrantes.$i.sexo", $integrante->sexo ?? '') == 'F' ? 'selected' : '' }}>F</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-2 py-2">
+                                        <input type="text" name="integrantes[{{$i}}][cedula]" value="{{ old("integrantes.$i.cedula", $integrante->cedula ?? '') }}" 
+                                            class="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:ring-lb-primary">
+                                    </td>
+                                    <td class="px-2 py-2">
+                                        <input type="text" name="integrantes[{{$i}}][escolaridad]" value="{{ old("integrantes.$i.escolaridad", $integrante->escolaridad ?? '') }}" 
+                                            class="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:ring-lb-primary">
+                                    </td>
+                                    <td class="px-2 py-2">
+                                        <input type="text" name="integrantes[{{$i}}][parentesco]" value="{{ old("integrantes.$i.parentesco", $integrante->parentesco ?? '') }}" 
+                                            class="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:ring-lb-primary">
+                                    </td>
+                                    <td class="px-2 py-2">
+                                        <input type="text" name="integrantes[{{$i}}][grupo_dispensarial]" value="{{ old("integrantes.$i.grupo_dispensarial", $integrante->grupo_dispensarial ?? '') }}" 
+                                            class="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:ring-lb-primary">
+                                    </td>
+                                    <td class="px-2 py-2">
+                                        <input type="text" name="integrantes[{{$i}}][patologias]" value="{{ old("integrantes.$i.patologias", $integrante->patologias ?? '') }}" 
+                                            class="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:ring-lb-primary" placeholder="Factores de riesgo, patologías...">
+                                    </td>
+                                </tr>
+                            @endfor
                         </tbody>
                     </table>
                 </div>

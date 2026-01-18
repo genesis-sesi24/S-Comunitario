@@ -46,6 +46,7 @@ class FamiliaController extends Controller
         $validated = $request->validate([
             'apellidos' => 'required|string|max:255',
             'vivienda_id' => 'nullable|exists:viviendas,id',
+            'numero_habitantes' => 'nullable|integer|min:0',
             'ingreso_mensual_aprox' => 'nullable|numeric|min:0',
         ]);
 
@@ -80,6 +81,7 @@ class FamiliaController extends Controller
         $validated = $request->validate([
             'apellidos' => 'required|string|max:255',
             'vivienda_id' => 'nullable|exists:viviendas,id',
+            'numero_habitantes' => 'nullable|integer|min:0',
             'ingreso_mensual_aprox' => 'nullable|numeric|min:0',
         ]);
 

@@ -106,8 +106,8 @@
                         <td>{{ $integrante->sexo ?? '' }}</td>
                         <td>{{ $integrante->cedula ?? '' }}</td>
                         <td>{{ $integrante->escolaridad ?? '' }}</td>
-                        <td><!-- G.D. --></td>
-                        <td><!-- Riesgos/Patologías --></td>
+                        <td>{{ $integrante->grupo_dispensarial ?? '' }}</td>
+                        <td>{{ $integrante->patologias ?? '' }}</td>
                     </tr>
                 @endfor
             </tbody>

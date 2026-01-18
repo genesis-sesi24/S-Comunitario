@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\FichaFamiliar;
 use App\Models\Familia;
+use App\Models\Patologia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FichaFamiliarController extends Controller
 {
@@ -69,13 +71,67 @@ class FichaFamiliarController extends Controller
             'otros_animales' => 'nullable|string|max:255',
             'vectores' => 'nullable|string|max:255',
             'discusion_evaluacion' => 'nullable|string',
+            // Integrantes
+            'integrantes' => 'nullable|array',
+            'integrantes.*.id' => 'nullable|exists:integrantes,id',
+            'integrantes.*.name' => 'nullable|string|max:255',
+            'integrantes.*.apellido' => 'nullable|string|max:255',
+            'integrantes.*.cedula' => 'nullable|string|max:20',
+            'integrantes.*.fecha_nacimiento' => 'nullable|date',
+            'integrantes.*.sexo' => 'nullable|string|max:10',
+            'integrantes.*.escolaridad' => 'nullable|string|max:255',
+            'integrantes.*.parentesco' => 'nullable|string|max:255',
+            'integrantes.*.grupo_dispensarial' => 'nullable|string|max:255',
+            'integrantes.*.patologias' => 'nullable|string',
         ]);
 
-        $validated['familia_id'] = $familia->id;
-        FichaFamiliar::create($validated);
+        return DB::transaction(function () use ($request, $familia, $validated) {
+            $validated['familia_id'] = $familia->id;
+            FichaFamiliar::create($validated);
 
-        return redirect()->route('familias.fichas.index', $familia)
-            ->with('success', 'Ficha familiar creada exitosamente.');
+            // Procesar Integrantes
+            if ($request->has('integrantes')) {
+                foreach ($request->integrantes as $intData) {
+                    if (empty($intData['name'])) continue; // Omitir filas sin nombre
+                    
+                    $user = null;
+                    
+                    // 1. Buscar por ID si existe
+                    if (isset($intData['id']) && !empty($intData['id'])) {
+                        $user = \App\Models\Integrante::find($intData['id']);
+                    }
+                    
+                    // 2. Si no hay ID o no se encontró, buscar por Cédula (si se proporcionó)
+                    if (!$user && !empty($intData['cedula'])) {
+                        $user = \App\Models\Integrante::where('cedula', $intData['cedula'])->first();
+                    }
+
+                    if ($user) {
+                        // Actualizar usuario existente y vincular a la familia
+                        $intData['familia_id'] = $familia->id;
+                        $user->update($intData);
+                    } else {
+                        // Crear nuevo
+                        $intData['familia_id'] = $familia->id;
+                        \App\Models\Integrante::create($intData);
+                    }
+
+                    // Registrar patologías en el catálogo automáticamente
+                    if (!empty($intData['patologias'])) {
+                        $patArr = explode(',', $intData['patologias']);
+                        foreach ($patArr as $pName) {
+                            $name = trim($pName);
+                            if (!empty($name)) {
+                                Patologia::firstOrCreate(['nombre' => $name]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return redirect()->route('familias.fichas.index', $familia)
+                ->with('success', 'Ficha familiar creada exitosamente.');
+        });
     }
 
     public function show(Familia $familia, FichaFamiliar $ficha)
@@ -115,9 +171,7 @@ class FichaFamiliarController extends Controller
             'tipo_vivienda' => 'nullable|in:casa,apartamento,habitacion,rancho,palafito,otros',
             'tipo_vivienda_otros' => 'nullable|string|max:255',
             'material_construccion' => 'nullable|in:bloque,madera,bahareque,carton,zinc,otros',
-            'material_otros' => 'nullable|string|max:255
-
-',
+            'material_otros' => 'nullable|string|max:255',
             'tipo_techo' => 'nullable|in:placa,asbesto,acerolit,guano,zinc,otros',
             'techo_otros' => 'nullable|string|max:255',
             'tipo_piso' => 'nullable|in:losas,cemento,tierra,madera,otros',
@@ -140,12 +194,64 @@ class FichaFamiliarController extends Controller
             'otros_animales' => 'nullable|string|max:255',
             'vectores' => 'nullable|string|max:255',
             'discusion_evaluacion' => 'nullable|string',
+            // Integrantes
+            'integrantes' => 'nullable|array',
+            'integrantes.*.id' => 'nullable|exists:integrantes,id',
+            'integrantes.*.name' => 'nullable|string|max:255',
+            'integrantes.*.apellido' => 'nullable|string|max:255',
+            'integrantes.*.cedula' => 'nullable|string|max:20',
+            'integrantes.*.fecha_nacimiento' => 'nullable|date',
+            'integrantes.*.sexo' => 'nullable|string|max:10',
+            'integrantes.*.escolaridad' => 'nullable|string|max:255',
+            'integrantes.*.parentesco' => 'nullable|string|max:255',
+            'integrantes.*.grupo_dispensarial' => 'nullable|string|max:255',
+            'integrantes.*.patologias' => 'nullable|string',
         ]);
 
-        $ficha->update($validated);
+        return DB::transaction(function () use ($request, $familia, $ficha, $validated) {
+            $ficha->update($validated);
 
-        return redirect()->route('familias.fichas.index', $familia)
-            ->with('success', 'Ficha familiar actualizada correctamente.');
+            // Procesar Integrantes
+            if ($request->has('integrantes')) {
+                foreach ($request->integrantes as $intData) {
+                    if (empty($intData['name'])) continue; // Omitir filas sin nombre
+
+                    $user = null;
+
+                    // 1. Buscar por ID
+                    if (isset($intData['id']) && !empty($intData['id'])) {
+                        $user = \App\Models\Integrante::find($intData['id']);
+                    }
+                    
+                    // 2. Buscar por Cédula si no hay ID
+                    if (!$user && !empty($intData['cedula'])) {
+                        $user = \App\Models\Integrante::where('cedula', $intData['cedula'])->first();
+                    }
+
+                    if ($user) {
+                        $intData['familia_id'] = $familia->id;
+                        $user->update($intData);
+                    } else {
+                        $intData['familia_id'] = $familia->id;
+                        \App\Models\Integrante::create($intData);
+                    }
+
+                    // Registrar patologías en el catálogo automáticamente
+                    if (!empty($intData['patologias'])) {
+                        $patArr = explode(',', $intData['patologias']);
+                        foreach ($patArr as $pName) {
+                            $name = trim($pName);
+                            if (!empty($name)) {
+                                Patologia::firstOrCreate(['nombre' => $name]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return redirect()->route('familias.fichas.index', $familia)
+                ->with('success', 'Ficha familiar actualizada correctamente.');
+        });
     }
 
     public function destroy(Familia $familia, FichaFamiliar $ficha)

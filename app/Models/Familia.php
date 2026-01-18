@@ -11,6 +11,7 @@ class Familia extends Model
     protected $fillable = [
         'vivienda_id',
         'apellidos',
+        'numero_habitantes',
         'ingreso_mensual_aprox'
     ];
 
@@ -21,7 +22,7 @@ class Familia extends Model
 
     public function integrantes(): HasMany
     {
-        return $this->hasMany(User::class, 'familia_id');
+        return $this->hasMany(Integrante::class, 'familia_id');
     }
 
     public function fichaFamiliares(): HasMany

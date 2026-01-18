@@ -77,6 +77,87 @@
         </div>
     </div>
 
+    <!-- Pathology Module -->
+    <div class="mb-8">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-slate-900">Patologías</h3>
+                <span class="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+                    {{ count($patologias) }} patologías registradas
+                </span>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                @forelse($patologias as $patologia)
+                    @php
+                        // Definir colores e iconos según el tipo de patología
+                        $iconColor = 'text-slate-400';
+                        $hoverColor = 'hover:border-lb-primary hover:bg-lb-primary/5';
+                        $iconPath = '';
+                        
+                        // Iconos específicos por patología
+                        switch(strtolower($patologia->nombre)) {
+                            case 'hipertensión arterial':
+                            case 'cardiopatía isquémica':
+                                $iconColor = 'text-red-500';
+                                $hoverColor = 'hover:border-red-400 hover:bg-red-50';
+                                // Icono de corazón
+                                $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>';
+                                break;
+                            case 'diabetes mellitus':
+                                $iconColor = 'text-purple-500';
+                                $hoverColor = 'hover:border-purple-400 hover:bg-purple-50';
+                                // Icono de gota (azúcar en sangre)
+                                $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 008 10.172V5L7 4z"/>';
+                                break;
+                            case 'asma bronquial':
+                            case 'epoc':
+                                $iconColor = 'text-cyan-500';
+                                $hoverColor = 'hover:border-cyan-400 hover:bg-cyan-50';
+                                // Icono de pulmones
+                                $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>';
+                                break;
+                            case 'obesidad':
+                                $iconColor = 'text-orange-500';
+                                $hoverColor = 'hover:border-orange-400 hover:bg-orange-50';
+                                // Icono de usuario
+                                $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>';
+                                break;
+                            case 'artritis':
+                                $iconColor = 'text-amber-600';
+                                $hoverColor = 'hover:border-amber-500 hover:bg-amber-50';
+                                // Icono de mano/articulación
+                                $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"/>';
+                                break;
+                            default:
+                                $iconColor = 'text-slate-400';
+                                $hoverColor = 'hover:border-lb-primary hover:bg-lb-primary/5';
+                                // Icono de documento médico
+                                $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>';
+                        }
+                    @endphp
+                    <button type="button" class="flex flex-col items-center p-4 rounded-lg border-2 border-slate-200 {{ $hoverColor }} transition-all duration-200 group cursor-pointer transform hover:scale-105">
+                        <svg class="w-10 h-10 {{ $iconColor }} group-hover:scale-110 transition-transform duration-200 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {!! $iconPath !!}
+                        </svg>
+                        <span class="text-sm font-semibold text-slate-800 text-center leading-tight mb-1">{{ $patologia->nombre }}</span>
+                        @if($patologia->tipo)
+                            <span class="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">{{ $patologia->tipo }}</span>
+                        @endif
+                    </button>
+                @empty
+                    <div class="col-span-full text-center py-12 text-slate-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <p class="font-medium">No hay patologías registradas</p>
+                        <p class="text-sm mt-1">Ejecuta el seeder para agregar patologías</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Quick Actions -->
         <div class="lg:col-span-2">
