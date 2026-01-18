@@ -36,10 +36,18 @@
                             @error('apellidos')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
+                        </div>                        <!-- Número de Habitantes -->
+                        <div class="sm:col-span-3">
+                            <label for="numero_habitantes" class="block text-sm font-medium text-slate-700">Número de Habitantes</label>
+                            <div class="mt-1">
+                                <input type="number" name="numero_habitantes" id="numero_habitantes" min="0"
+                                    class="block w-full rounded-md border-slate-300 shadow-sm focus:border-lb-primary focus:ring-lb-primary sm:text-sm"
+                                    value="{{ old('numero_habitantes', $familia->numero_habitantes) }}">
+                            </div>
+                            @error('numero_habitantes')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
-
-
-
                         <!-- Ingresos -->
                         <div class="sm:col-span-3">
                             <label for="ingreso_mensual_aprox" class="block text-sm font-medium text-slate-700">Ingreso Mensual Aprox.</label>
