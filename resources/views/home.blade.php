@@ -4,24 +4,37 @@
 
 @section('content')
     <!-- Hero Warning/Welcome -->
+    @php
+        $hour = now()->hour;
+        if ($hour >= 6 && $hour < 12) {
+            $greeting = 'Buenos días';
+            $emoji = '☀️';
+        } elseif ($hour >= 12 && $hour < 19) {
+            $greeting = 'Buenas tardes';
+            $emoji = '🌤️';
+        } else {
+            $greeting = 'Buenas noches';
+            $emoji = '🌙';
+        }
+    @endphp
     <div class="mb-8">
-        <h1 class="text-3xl font-display font-bold text-slate-800">Buenos días, {{ explode(' ', Auth::user()->name)[0] }} ☀️</h1>
-        <p class="text-slate-500 text-lg mt-1">Aquí tienes un resumen de la actividad en tu comunidad hoy.</p>
+        <h1 class="text-3xl font-display font-bold text-slate-800">{{ $greeting }}, {{ explode(' ', Auth::user()->name)[0] }} {{ $emoji }}</h1>
+        <p class="text-slate-500 text-lg mt-1">Aquí tienes un resumen de la actividad en <span class="font-bold theme-text">{{ $settings->nombre }}</span> hoy.</p>
     </div>
 
     <!-- Main Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <!-- Card: Familias -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start justify-between hover:border-cyan-200 hover:shadow-md transition-all">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start justify-between hover:shadow-md transition-all" style="border-color: color-mix(in srgb, var(--theme-color) 20%, #e2e8f0);">
             <div>
                 <p class="text-sm font-bold text-slate-400 uppercase tracking-wide">Total Familias</p>
-                <h3 class="text-4xl font-display font-bold text-slate-800 mt-2">{{ rand(50, 150) }}</h3>
-                <span class="inline-flex items-center mt-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-cyan-50 text-cyan-700 border border-cyan-100">
+                <h3 class="text-4xl font-display font-bold text-slate-800 mt-2">{{ $stats['familias'] }}</h3>
+                <span class="inline-flex items-center mt-2 px-2.5 py-0.5 rounded-full text-xs font-medium border" style="background-color: color-mix(in srgb, var(--theme-color) 10%, white); color: var(--theme-color-dark); border-color: color-mix(in srgb, var(--theme-color) 20%, white);">
                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
-                    +12 este mes
+                    +{{ $stats['nuevas_familias_mes'] }} este mes
                 </span>
             </div>
-            <div class="p-3 bg-cyan-50 text-cyan-600 rounded-xl">
+            <div class="p-3 rounded-xl" style="background-color: color-mix(in srgb, var(--theme-color) 10%, white); color: var(--theme-color);">
                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
             </div>
         </div>
@@ -30,9 +43,9 @@
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start justify-between hover:border-sky-200 hover:shadow-md transition-all">
             <div>
                 <p class="text-sm font-bold text-slate-400 uppercase tracking-wide">Habitantes</p>
-                <h3 class="text-4xl font-display font-bold text-slate-800 mt-2">{{ rand(200, 500) }}</h3>
+                <h3 class="text-4xl font-display font-bold text-slate-800 mt-2">{{ $stats['integrantes'] }}</h3>
                  <span class="inline-flex items-center mt-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-50 text-sky-700 border border-sky-100">
-                    Activos
+                    Censo Activo
                 </span>
             </div>
              <div class="p-3 bg-sky-50 text-sky-600 rounded-xl">
@@ -44,7 +57,7 @@
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start justify-between hover:border-indigo-200 hover:shadow-md transition-all">
             <div>
                 <p class="text-sm font-bold text-slate-400 uppercase tracking-wide">Sectores</p>
-                <h3 class="text-4xl font-display font-bold text-slate-800 mt-2">{{ rand(5, 12) }}</h3>
+                <h3 class="text-4xl font-display font-bold text-slate-800 mt-2">{{ $stats['sectores'] }}</h3>
                 <span class="text-xs text-slate-400 mt-2 block">Cobertura Total</span>
             </div>
              <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
@@ -53,16 +66,16 @@
         </div>
 
         <!-- Card: Fichas -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start justify-between hover:border-teal-200 hover:shadow-md transition-all">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start justify-between hover:shadow-md transition-all" style="border-color: color-mix(in srgb, var(--theme-color) 20%, #e2e8f0);">
             <div>
                 <p class="text-sm font-bold text-slate-400 uppercase tracking-wide">Fichas Médicas</p>
-                <h3 class="text-4xl font-display font-bold text-slate-800 mt-2">{{ rand(40, 100) }}</h3>
-                <span class="inline-flex items-center mt-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-50 text-teal-700 border border-teal-100">
+                <h3 class="text-4xl font-display font-bold text-slate-800 mt-2">{{ $stats['fichas'] }}</h3>
+                <span class="inline-flex items-center mt-2 px-2.5 py-0.5 rounded-full text-xs font-medium border" style="background-color: color-mix(in srgb, var(--theme-color) 10%, white); color: var(--theme-color-dark); border-color: color-mix(in srgb, var(--theme-color) 20%, white);">
                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                    3 hoy
+                    {{ $stats['nuevas_fichas_hoy'] }} hoy
                 </span>
             </div>
-             <div class="p-3 bg-teal-50 text-teal-600 rounded-xl">
+             <div class="p-3 rounded-xl" style="background-color: color-mix(in srgb, var(--theme-color) 10%, white); color: var(--theme-color);">
                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </div>
         </div>
@@ -77,7 +90,7 @@
             <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex md:items-center justify-between gap-4 flex-col md:flex-row">
                 <h3 class="font-bold text-slate-700 whitespace-nowrap px-2">Acciones Rápidas</h3>
                 <div class="flex gap-3 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
-                    <a href="{{ route('familias.index') }}" class="flex items-center px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-bold transition-colors whitespace-nowrap shadow-sm hover:shadow">
+                    <a href="{{ route('familias.index') }}" class="flex items-center px-4 py-2 theme-bg hover:opacity-90 text-white rounded-lg text-sm font-bold transition-all whitespace-nowrap shadow-sm hover:shadow">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         Nueva Familia
                     </a>
@@ -134,7 +147,7 @@
                     
                     @if(count($patologias) > 0)
                         <div class="p-4 bg-slate-50 text-center">
-                            <a href="#" class="text-sm font-bold text-cyan-600 hover:text-cyan-700">Ver reporte completo &rarr;</a>
+                            <a href="#" class="text-sm font-bold theme-text hover:opacity-75 transition-opacity">Ver reporte completo &rarr;</a>
                         </div>
                     @endif
                 </div>
@@ -146,49 +159,43 @@
             
             <!-- User Info Card -->
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
-                <div class="w-20 h-20 mx-auto rounded-full bg-cyan-50 flex items-center justify-center mb-4 border border-cyan-100">
-                    <span class="text-2xl font-bold text-cyan-600">{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</span>
+                <div class="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 border-2 theme-border relative overflow-hidden" style="background-color: color-mix(in srgb, var(--theme-color) 10%, white);">
+                    @if(Auth::user()->getAvatarUrl())
+                        <img src="{{ Auth::user()->getAvatarUrl() }}" class="w-full h-full object-cover">
+                    @else
+                        <span class="text-2xl font-bold theme-text">{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</span>
+                    @endif
                 </div>
                 <h3 class="font-bold text-lg text-slate-800">{{ Auth::user()->name }}</h3>
                 <p class="text-sm text-slate-500 mb-4">{{ Auth::user()->getRoleName() }}</p>
                 
                 <div class="grid grid-cols-2 gap-2 text-sm border-t border-slate-100 pt-4">
                     <div class="text-center p-2 rounded-lg bg-slate-50">
-                        <span class="block font-bold text-slate-700">12</span>
-                        <span class="text-xs text-slate-400">Sesiones</span>
+                        <span class="block font-bold text-slate-700">{{ $stats['familias'] }}</span>
+                        <span class="text-xs text-slate-400">Total Fam.</span>
                     </div>
                     <div class="text-center p-2 rounded-lg bg-slate-50">
-                        <span class="block font-bold text-slate-700">Active</span>
+                        <span class="block font-bold text-emerald-600">Activo</span>
                         <span class="text-xs text-slate-400">Estado</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Recent Activity Text List -->
+            <!-- Recent Activity List -->
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <h3 class="font-bold text-slate-800 mb-4">Actividad Reciente</h3>
                 <ul class="space-y-4">
-                    <li class="flex gap-3">
-                        <div class="flex-shrink-0 w-2 h-2 mt-1.5 rounded-full bg-teal-500"></div>
-                        <div>
-                            <p class="text-sm text-slate-800">Nueva familia registrada en <span class="font-semibold">Sector Norte</span></p>
-                            <span class="text-xs text-slate-400">Hace 2 horas</span>
-                        </div>
-                    </li>
-                    <li class="flex gap-3">
-                        <div class="flex-shrink-0 w-2 h-2 mt-1.5 rounded-full bg-cyan-500"></div>
-                        <div>
-                            <p class="text-sm text-slate-800">Actualización de censo completada</p>
-                            <span class="text-xs text-slate-400">Hace 5 horas</span>
-                        </div>
-                    </li>
-                     <li class="flex gap-3">
-                        <div class="flex-shrink-0 w-2 h-2 mt-1.5 rounded-full bg-sky-500"></div>
-                        <div>
-                            <p class="text-sm text-slate-800">Usuario administrador agregado</p>
-                            <span class="text-xs text-slate-400">Ayer</span>
-                        </div>
-                    </li>
+                    @forelse($activities as $activity)
+                        <li class="flex gap-3">
+                            <div class="flex-shrink-0 w-2 h-2 mt-1.5 rounded-full {{ $activity['icon'] }}"></div>
+                            <div>
+                                <p class="text-sm text-slate-800">{{ $activity['title'] }}</p>
+                                <span class="text-xs text-slate-400">{{ $activity['time'] }}</span>
+                            </div>
+                        </li>
+                    @empty
+                        <li class="p-2 text-center text-slate-400 text-sm">No hay actividad reciente registrada.</li>
+                    @endforelse
                 </ul>
             </div>
             

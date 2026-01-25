@@ -6,11 +6,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+// Security Question Recovery
+Route::post('/password/security/question', [App\Http\Controllers\Auth\SecurityRecoveryController::class, 'getQuestion'])->name('password.security.question');
+Route::post('/password/security/verify', [App\Http\Controllers\Auth\SecurityRecoveryController::class, 'verify'])->name('password.security.verify');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/admin/ajustes', [App\Http\Controllers\AjusteController::class, 'index'])->name('admin.ajustes');
+Route::put('/admin/ajustes', [App\Http\Controllers\AjusteController::class, 'update'])->name('admin.ajustes.update');
 
 // User Management Routes (Protected)
 Route::middleware('auth')->group(function () {
@@ -28,4 +34,12 @@ Route::middleware('auth')->group(function () {
     
     // Ficha Familiar Routes (nested under familias)
     Route::resource('familias.fichas', App\Http\Controllers\FichaFamiliarController::class);
+
+    // Profile Routes
+    Route::get('profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+    Route::put('profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::post('profile/avatar', [App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar');
+    Route::post('profile/theme', [App\Http\Controllers\ProfileController::class, 'updateTheme'])->name('profile.theme');
+    Route::post('profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('profile/security', [App\Http\Controllers\ProfileController::class, 'updateSecurity'])->name('profile.security');
 });

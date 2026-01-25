@@ -1,90 +1,118 @@
-@extends('layouts.auth_custom')
-
-@section('title', 'Bienvenido de nuevo')
-@section('subtitle', 'Ingresa a tu cuenta para continuar')
-
-@section('content')
-<form action="{{ route('login') }}" method="post" id="loginForm" onsubmit="validateForm('loginForm', event)" class="fade-in-up" style="animation-delay: 0.2s;">
-    @csrf
-
-    <div class="space-y-6">
-        <!-- Email Input -->
-        <div class="relative group">
-            <div class="absolute inset-y-0 left-0 pl-12 flex items-center pointer-events-none">
-                <div class="p-2 bg-lb-primary/10 rounded-lg group-focus-within:bg-lb-primary/20 transition-colors">
-                    <svg class="w-5 h-5 text-lb-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                    </svg>
-                </div>
-            </div>
-            <input type="email" name="email" id="email" 
-                   class="block w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-lb-primary focus:ring-1 focus:ring-lb-primary transition-all duration-300 hover:bg-white" 
-                   value="{{ old('email') }}" required autofocus placeholder="Correo electrónico">
-            @error('email')
-                <span class="absolute -bottom-5 left-0 text-red-500 text-xs pl-1 font-medium">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <!-- Password Input -->
-        <div class="relative group">
-            <div class="absolute inset-y-0 left-0 pl-12 flex items-center pointer-events-none">
-                <div class="p-2 bg-lb-primary/10 rounded-lg group-focus-within:bg-lb-primary/20 transition-colors">
-                    <svg class="w-5 h-5 text-lb-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                </div>
-            </div>
-            <input type="password" name="password" id="password" 
-                   class="block w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-lb-primary focus:ring-1 focus:ring-lb-primary transition-all duration-300 hover:bg-white" 
-                   required placeholder="Contraseña">
-            @error('password')
-                <span class="absolute -bottom-5 left-0 text-red-500 text-xs pl-1 font-medium">{{ $message }}</span>
-            @enderror
-        </div>
-    </div>
-
-    <!-- Options Row -->
-    <div class="flex items-center justify-between mt-6 mb-8">
-        <label class="flex items-center gap-3 cursor-pointer group">
-            <div class="relative">
-                <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }} class="sr-only peer">
-                <div class="w-5 h-5 border-2 border-slate-300 rounded peer-checked:bg-lb-primary peer-checked:border-lb-primary transition-colors"></div>
-                <svg class="w-3 h-3 text-white absolute top-1 left-1 opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                </svg>
-            </div>
-            <span class="text-sm text-slate-500 group-hover:text-slate-700 transition-colors select-none">{{ __('Remember Me') }}</span>
-        </label>
-        
-        @if (Route::has('password.request'))
-            <a href="{{ route('password.request') }}" class="text-sm text-lb-primary font-semibold hover:text-lb-primary-dark hover:underline underline-offset-4 transition-all">
-                {{ __('Forgot Your Password?') }}
-            </a>
-        @endif
-    </div>
-
-    <!-- Submit Button -->
-    <button type="submit" class="btn-premium w-full text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.98] transition-all duration-300">
-        {{ __('Login') }}
-    </button>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - La Batalla</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="min-h-screen flex items-center justify-center bg-slate-50 font-sans">
+    @include('components.toast')
     
-    <!-- Footer actions -->
-    <div class="mt-8 pt-8 border-t border-slate-100 text-center space-y-4">
-        <p class="text-slate-600 text-sm">
-            ¿Aún no tienes una cuenta? 
-            <a href="{{ route('register') }}" class="text-lb-primary font-bold hover:text-lb-primary-dark transition-colors inline-flex items-center ml-1 group">
-                Regístrate ahora
-                <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-            </a>
-        </p>
-        <a href="{{ url('/') }}" class="inline-flex items-center text-sm text-slate-400 hover:text-slate-600 transition-colors">
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Volver al inicio
-        </a>
+    <div class="w-full max-w-5xl h-full md:h-auto p-6">
+        <div class="grid md:grid-cols-2 bg-white rounded-3xl shadow-xl overflow-hidden min-h-[600px]">
+            
+            <!-- Left Side: Branding (Professional Slate/Dark) -->
+            <div class="hidden md:flex flex-col justify-center items-center bg-slate-900 text-white p-12 relative overflow-hidden">
+                <!-- Abstract Background Pattern -->
+                <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 30px 30px;"></div>
+                <div class="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-teal-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+                <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+
+                <div class="relative z-10 text-center">
+                    <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/20 overflow-hidden">
+                        @if($settings->logo_Cm && $settings->logo_Cm != 'default-logo-sm.png')
+                            <img src="{{ asset('storage/' . $settings->logo_Cm) }}" class="w-full h-full object-cover">
+                        @else
+                            <span class="font-bold text-2xl text-white">{{ strtoupper(substr($settings->nombre, 0, 2)) }}</span>
+                        @endif
+                    </div>
+                    <h2 class="font-display text-3xl font-bold mb-4">{{ $settings->nombre }}</h2>
+                    <p class="text-slate-400 font-light leading-relaxed max-w-xs mx-auto">
+                        {{ Str::limit($settings->descripcion, 80) }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Side: Form (Clean White) -->
+            <div class="p-10 md:p-12 flex flex-col justify-center">
+                <div class="text-center md:text-left mb-8">
+                    <h1 class="font-display text-2xl font-bold text-slate-800 mb-1">Bienvenido de nuevo</h1>
+                    <p class="text-sm text-slate-500">Por favor, ingresa tus credenciales</p>
+                </div>
+
+                <form action="{{ route('login') }}" method="POST">
+                    @csrf
+                    
+                    <div class="space-y-5">
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Correo Electrónico</label>
+                            <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                                   class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all text-sm @error('email') border-red-500 @enderror"
+                                   placeholder="tu@ejemplo.com">
+                            @error('email')
+                                <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Password -->
+                        <div>
+                            <label for="password" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Contraseña</label>
+                            <input type="password" name="password" id="password" required
+                                   class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all text-sm @error('password') border-red-500 @enderror"
+                                   placeholder="••••••••">
+                            @error('password')
+                                <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Remember & Forgot -->
+                    <div class="flex items-center justify-between mt-6">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}
+                                   class="w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500">
+                            <span class="text-sm text-slate-600">Recuérdame</span>
+                        </label>
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}" class="text-sm text-teal-600 hover:text-teal-700 font-medium transition-colors">
+                                Recuperar contraseña
+                            </a>
+                        @endif
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full bg-teal-600 text-white font-semibold py-3.5 rounded-xl hover:bg-teal-700 transition-all shadow-lg shadow-teal-600/20 mt-8 transform active:scale-[0.98]">
+                        INICIAR SESIÓN
+                    </button>
+                    
+                    <!-- Divider -->
+                    <div class="relative my-8">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-slate-100"></div>
+                        </div>
+                        <div class="relative flex justify-center text-xs uppercase">
+                            <span class="bg-white px-2 text-slate-400">O crea una cuenta</span>
+                        </div>
+                    </div>
+
+                    <!-- Register Link -->
+                    <a href="{{ route('register') }}" class="block w-full text-center border border-slate-200 text-slate-600 font-semibold py-3.5 rounded-xl hover:bg-slate-50 hover:text-slate-800 transition-all">
+                        Registrarse
+                    </a>
+                </form>
+
+                <div class="mt-8 text-center">
+                    <a href="{{ url('/') }}" class="inline-flex items-center text-xs text-slate-400 hover:text-slate-600 transition-colors gap-2">
+                        ← Volver al inicio
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-</form>
-@endsection
+</body>
+</html>

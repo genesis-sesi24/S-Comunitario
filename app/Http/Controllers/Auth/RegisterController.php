@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserSecurityAnswer;
+use App\Models\PasswordHistory;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -52,6 +54,18 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'security_question_id' => ['required', 'exists:security_questions,id'],
+            'security_answer' => ['required', 'string', 'min:2'],
+        ], [
+            'name.required' => 'El nombre es obligatorio.',
+            'email.required' => 'El correo es obligatorio.',
+            'email.email' => 'Ingresa un correo válido.',
+            'email.unique' => 'Este correo ya está registrado.',
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+            'security_question_id.required' => 'Selecciona una pregunta de seguridad.',
+            'security_answer.required' => 'La respuesta de seguridad es obligatoria.',
         ]);
     }
 
@@ -63,10 +77,26 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        // Save security answer
+        UserSecurityAnswer::create([
+            'user_id' => $user->id,
+            'security_question_id' => $data['security_question_id'],
+            'answer' => $data['security_answer'], // Auto-hashed by model mutator
+        ]);
+
+        // Save initial password to history
+        PasswordHistory::create([
+            'user_id' => $user->id,
+            'password' => Hash::make($data['password']),
+            'status' => 1, // Active
+        ]);
+
+        return $user;
     }
 }

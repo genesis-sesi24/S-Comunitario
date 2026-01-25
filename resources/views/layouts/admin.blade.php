@@ -9,17 +9,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('styles')
+
+    @php
+    // Helper function to adjust color brightness
+    if (!function_exists('adjustBrightness')) {
+        function adjustBrightness($hex, $steps) {
+            // Remove # if present
+            $hex = ltrim($hex, '#');
+            
+            // Convert to RGB
+            $r = hexdec(substr($hex, 0, 2));
+            $g = hexdec(substr($hex, 2, 2));
+            $b = hexdec(substr($hex, 4, 2));
+            
+            // Adjust
+            $r = max(0, min(255, $r + $steps));
+            $g = max(0, min(255, $g + $steps));
+            $b = max(0, min(255, $b + $steps));
+            
+            // Convert back to hex
+            return sprintf("#%02x%02x%02x", $r, $g, $b);
+        }
+    }
+    @endphp
+
     <style>
+        :root {
+            --theme-color: {{ auth()->user()->getThemeColor() }};
+            --theme-color-dark: {{ adjustBrightness(auth()->user()->getThemeColor(), -20) }};
+            --theme-color-light: {{ adjustBrightness(auth()->user()->getThemeColor(), 20) }};
+            
+            /* Override LB Primary Colors with Dynamic Theme */
+            --color-lb-primary: var(--theme-color);
+            --color-lb-primary-light: var(--theme-color-light);
+            --color-lb-primary-dark: var(--theme-color-dark);
+        }
+        
         body { font-family: 'DM Sans', sans-serif; }
         h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Outfit', sans-serif; }
+        
         .sidebar-active {
-            background-color: #ecfeff; /* cyan-50 */
-            color: #0e7490; /* cyan-700 */
-            border-right: 3px solid #06b6d4; /* cyan-500 */
+            background-color: color-mix(in srgb, var(--theme-color) 10%, white);
+            color: var(--theme-color-dark);
+            border-right: 3px solid var(--theme-color);
         }
         .sidebar-link:hover:not(.sidebar-active) {
-            background-color: #f8fafc; /* slate-50 */
-            color: #0891b2; /* cyan-600 */
+            background-color: #f8fafc;
+            color: var(--theme-color);
+        }
+        
+        /* Apply theme color to gradients */
+        .theme-bg-gradient {
+            background: linear-gradient(135deg, var(--theme-color) 0%, var(--theme-color-dark) 100%);
+        }
+        
+        .theme-text {
+            color: var(--theme-color);
+        }
+        
+        .theme-bg {
+            background-color: var(--theme-color);
+        }
+        
+        .theme-border {
+            border-color: var(--theme-color);
         }
     </style>
 </head>
@@ -28,8 +81,14 @@
     <!-- Mobile Header -->
     <header class="md:hidden bg-white/90 backdrop-blur-md border-b border-slate-200 h-16 flex items-center justify-between px-4 z-20">
         <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">B</div>
-            <span class="font-display font-bold text-xl text-slate-800">La Batalla</span>
+            <div class="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center text-white font-bold text-lg shadow-sm overflow-hidden">
+                @if($settings->logo_Cm && $settings->logo_Cm != 'default-logo-sm.png')
+                    <img src="{{ asset('storage/' . $settings->logo_Cm) }}" class="w-full h-full object-cover">
+                @else
+                    {{ strtoupper(substr($settings->nombre, 0, 1)) }}
+                @endif
+            </div>
+            <span class="font-display font-bold text-xl text-slate-800">{{ $settings->nombre }}</span>
         </div>
         <button id="mobileMenuBtn" class="p-2 text-slate-500 rounded-lg hover:bg-slate-100">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -41,9 +100,18 @@
         <!-- Logo -->
         <div class="h-20 flex items-center px-6 border-b border-slate-100">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 shadow-cyan-200 shadow-lg flex items-center justify-center text-white font-display font-bold text-xl">L</div>
+                @if($settings->logo_Cm && $settings->logo_Cm != 'default-logo-sm.png')
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center overflow-hidden border border-slate-100">
+                        <img src="{{ asset('storage/' . $settings->logo_Cm) }}" class="w-8 h-8 object-contain">
+                    </div>
+                @else
+                    <div class="w-10 h-10 rounded-xl theme-bg-gradient shadow-lg flex items-center justify-center text-white font-display font-bold text-xl">
+                        {{ strtoupper(substr($settings->nombre, 0, 1)) }}
+                    </div>
+                @endif
+                
                 <div class="flex flex-col">
-                    <span class="font-display font-bold text-lg leading-tight text-slate-800">La Batalla</span>
+                    <span class="font-display font-bold text-lg leading-tight text-slate-800 line-clamp-1" title="{{ $settings->nombre }}">{{ $settings->nombre }}</span>
                     <span class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Comunidad Digital</span>
                 </div>
             </div>
@@ -54,15 +122,19 @@
 
         <!-- User Profile Minimal -->
         <div class="px-6 py-6">
-            <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
-                <div class="w-10 h-10 rounded-full bg-white text-cyan-600 flex items-center justify-center font-bold text-sm border-2 border-cyan-100 shadow-sm">
-                    {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
-                </div>
+            <a href="{{ route('profile.index') }}" class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-slate-300 hover:shadow-sm transition-all group">
+                @if(auth()->user()->getAvatarUrl())
+                    <img src="{{ auth()->user()->getAvatarUrl() }}" alt="Avatar" class="w-10 h-10 rounded-full border-2 theme-border shadow-sm object-cover">
+                @else
+                    <div class="w-10 h-10 rounded-full bg-white theme-text flex items-center justify-center font-bold text-sm border-2 theme-border shadow-sm">
+                        {{ auth()->user()->getInitials() }}
+                    </div>
+                @endif
                 <div class="flex-1 min-w-0">
-                    <p class="text-sm font-bold text-slate-800 truncate">{{ auth()->user()->name }}</p>
+                    <p class="text-sm font-bold text-slate-800 truncate group-hover:theme-text transition-colors">{{ auth()->user()->name }}</p>
                     <p class="text-xs text-slate-500 truncate">{{ auth()->user()->getRoleName() }}</p>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Navigation -->
@@ -121,8 +193,8 @@
             <h2 class="text-2xl font-display font-bold text-slate-800">@yield('title', 'Admin')</h2>
             
             <div class="flex items-center gap-4">
-               <div class="flex items-center gap-2 px-3 py-1 bg-cyan-50 text-cyan-700 rounded-full border border-cyan-100 text-xs font-semibold shadow-sm">
-                    <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+               <div class="flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold shadow-sm" style="background-color: color-mix(in srgb, var(--theme-color) 10%, white); color: var(--theme-color-dark); border-color: color-mix(in srgb, var(--theme-color) 20%, white);">
+                    <span class="w-2 h-2 rounded-full theme-bg"></span>
                     Sistema Activo
                </div>
                <span class="text-slate-300">|</span>
@@ -132,22 +204,7 @@
 
         <div class="p-6 md:p-8 max-w-7xl mx-auto pb-20">
             
-            <!-- Alerts -->
-            @if(session('success'))
-                <div class="mb-6 bg-cyan-50 border-l-4 border-cyan-500 text-cyan-800 px-6 py-4 rounded-r-lg shadow-sm flex items-center" role="alert">
-                     <svg class="w-5 h-5 mr-3 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    <p class="font-medium">{{ session('success') }}</p>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="mb-6 bg-rose-50 border-l-4 border-rose-500 text-rose-800 px-6 py-4 rounded-r-lg shadow-sm flex items-center" role="alert">
-                    <svg class="w-5 h-5 mr-3 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <p class="font-medium">{{ session('error') }}</p>
-                </div>
-            @endif
-
-            @yield('content')
+@yield('content')
         </div>
     </main>
 
@@ -170,5 +227,6 @@
         overlay.addEventListener('click', toggleSidebar);
     </script>
     @yield('scripts')
+    <x-toast />
 </body>
 </html>
