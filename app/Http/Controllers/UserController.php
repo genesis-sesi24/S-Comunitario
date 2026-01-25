@@ -89,13 +89,22 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
-            'password' => 'nullable|string|min:8|confirmed',
+            'password' => [
+                'nullable',
+                'string',
+                'min:8',
+                'confirmed',
+                new \App\Rules\UnusedPassword($user->email)
+            ],
             'role' => 'required|in:admin,medico,secretaria,paciente',
             'phone' => 'nullable|string|max:20',
             'is_active' => 'required|boolean',
         ]);
 
         if (!empty($validated['password'])) {
+            // Save to history
+            \App\Models\PasswordHistory::addToHistory($user->id, $validated['password']);
+            
             $validated['password'] = Hash::make($validated['password']);
         } else {
             unset($validated['password']);

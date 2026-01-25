@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +25,8 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
+        'avatar',
+        'theme_color',
         'is_active',
         'familia_id',
         'parentesco',
@@ -32,6 +35,7 @@ class User extends Authenticatable
         'sexo',
         'escolaridad'
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -88,5 +92,52 @@ class User extends Authenticatable
             default:
                 return 'Desconocido';
         }
+    }
+
+    /**
+     * Relationship with UserSecurityAnswer
+     */
+    public function securityAnswer()
+    {
+        return $this->hasOne(UserSecurityAnswer::class);
+    }
+
+    /**
+     * Relationship with PasswordHistory
+     */
+    public function passwordHistories()
+    {
+        return $this->hasMany(PasswordHistory::class);
+    }
+
+    /**
+     * Get avatar URL or default initials
+     */
+    public function getAvatarUrl(): ?string
+    {
+        if ($this->avatar && file_exists(public_path($this->avatar))) {
+            return asset($this->avatar);
+        }
+        return null;
+    }
+
+    /**
+     * Get user initials for avatar placeholder
+     */
+    public function getInitials(): string
+    {
+        $nameParts = explode(' ', $this->name);
+        if (count($nameParts) >= 2) {
+            return strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1));
+        }
+        return strtoupper(substr($this->name, 0, 2));
+    }
+
+    /**
+     * Get theme color or default
+     */
+    public function getThemeColor(): string
+    {
+        return $this->theme_color ?? '#0d9488';
     }
 }
