@@ -56,6 +56,49 @@
                             @enderror
                         </div>
 
+                        <!-- Manzana -->
+                        <div class="md:col-span-2">
+                            <label for="manzana_id" class="block text-sm font-bold text-slate-700 mb-2">Manzana <span class="text-red-500">*</span></label>
+                            <select name="manzana_id" id="manzana_id" required 
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 transition-all text-sm appearance-none"
+                                style="--tw-ring-color: color-mix(in srgb, var(--theme-color) 20%, transparent); border-color: transparent;">
+                                <option value="">Seleccione una manzana...</option>
+                                @foreach($manzanas as $manzana)
+                                    <option value="{{ $manzana->id }}" {{ old('manzana_id') == $manzana->id ? 'selected' : '' }}>
+                                        {{ $manzana->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('manzana_id')
+                                <p class="mt-1 text-xs font-medium text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Número de Casa -->
+                        <div>
+                            <label for="numero_casa" class="block text-sm font-bold text-slate-700 mb-2">Número de Casa</label>
+                            <input type="text" name="numero_casa" id="numero_casa" 
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 transition-all text-sm"
+                                style="--tw-ring-color: color-mix(in srgb, var(--theme-color) 20%, transparent); border-color: transparent;"
+                                placeholder="Ej. A-12" value="{{ old('numero_casa') }}">
+                        </div>
+
+                        <!-- Calle Transversal -->
+                        <div>
+                            <label for="calle_transversal" class="block text-sm font-bold text-slate-700 mb-2">Calle Transversal / Referencia</label>
+                            <input type="text" name="calle_transversal" id="calle_transversal" 
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 transition-all text-sm"
+                                style="--tw-ring-color: color-mix(in srgb, var(--theme-color) 20%, transparent); border-color: transparent;"
+                                placeholder="Ej. Cruce con Av. Bolivar" value="{{ old('calle_transversal') }}">
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2 mb-6 mt-10">
+                        <span class="w-1 h-6 rounded-full theme-bg" style="background-color: var(--theme-color);"></span>
+                        Información Adicional
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Número de Habitantes -->
                         <div>
                             <label for="numero_habitantes" class="block text-sm font-bold text-slate-700 mb-2">Número de Habitantes</label>
@@ -75,24 +118,6 @@
                             @enderror
                         </div>
 
-                        <!-- Ingresos -->
-                        <div>
-                            <label for="ingreso_mensual_aprox" class="block text-sm font-bold text-slate-700 mb-2">Ingreso Mensual Aprox.</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span class="text-slate-500 font-bold">$</span>
-                                </div>
-                                <input type="number" name="ingreso_mensual_aprox" id="ingreso_mensual_aprox" min="0" step="0.01"
-                                    class="w-full pl-8 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 transition-all text-sm"
-                                    style="--tw-ring-color: color-mix(in srgb, var(--theme-color) 20%, transparent); border-color: transparent;"
-                                    onfocus="this.style.borderColor = 'var(--theme-color)'"
-                                    onblur="this.style.borderColor = 'transparent'"
-                                    placeholder="0.00" value="{{ old('ingreso_mensual_aprox') }}">
-                            </div>
-                            @error('ingreso_mensual_aprox')
-                                <p class="mt-1 text-xs font-medium text-red-500">{{ $message }}</p>
-                            @enderror
-                        </div>
                     </div>
                 </div>
             </div>

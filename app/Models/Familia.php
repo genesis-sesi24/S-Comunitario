@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,18 +10,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Familia extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'vivienda_id',
+        'manzana_id',
+        'numero_casa',
+        'calle_transversal',
         'apellidos',
         'numero_habitantes',
-        'ingreso_mensual_aprox'
+        'numero_habitantes'
     ];
 
-    public function vivienda(): BelongsTo
+    public function manzana(): BelongsTo
     {
-        return $this->belongsTo(Vivienda::class);
+        return $this->belongsTo(Manzana::class);
     }
 
     public function integrantes(): HasMany

@@ -27,9 +27,7 @@ return new class extends Migration
             // Clasificación de la Familia
             $table->enum('numero_miembros', ['pequena', 'mediana', 'grande'])->nullable();
             $table->enum('antecedentes_familia', ['nuclear', 'extensa', 'ampliada'])->nullable();
-            $table->enum('numero_generaciones', ['unigeneracional', 'bigeneracional', '
-
-trigeneracional', 'multigeneracional'])->nullable();
+            $table->enum('numero_generaciones', ['unigeneracional', 'bigeneracional', 'trigeneracional', 'multigeneracional'])->nullable();
             $table->enum('etapa_desarrollo', ['formacion', 'contraccion', 'extension', 'disolucion'])->nullable();
             
             // Condiciones Socioeconómicas

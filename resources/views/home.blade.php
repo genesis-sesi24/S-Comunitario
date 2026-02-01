@@ -53,10 +53,10 @@
             </div>
         </div>
 
-        <!-- Card: Sectores -->
+        <!-- Card: Manzanas -->
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start justify-between hover:border-indigo-200 hover:shadow-md transition-all">
             <div>
-                <p class="text-sm font-bold text-slate-400 uppercase tracking-wide">Sectores</p>
+                <p class="text-sm font-bold text-slate-400 uppercase tracking-wide">Manzanas</p>
                 <h3 class="text-4xl font-display font-bold text-slate-800 mt-2">{{ $stats['sectores'] }}</h3>
                 <span class="text-xs text-slate-400 mt-2 block">Cobertura Total</span>
             </div>

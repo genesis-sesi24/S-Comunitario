@@ -5,17 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Sector extends Model
+class Manzana extends Model
 {
-    protected $table = 'sectores';
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
+
+    protected $table = 'manzanas';
     
     protected $fillable = [
         'nombre',
         'descripcion'
     ];
 
-    public function calles(): HasMany
+    public function familias(): HasMany
     {
-        return $this->hasMany(Calle::class);
+        return $this->hasMany(Familia::class);
     }
 }

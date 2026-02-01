@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Familia;
-use App\Models\Vivienda;
+use App\Models\Manzana;
 use Illuminate\Http\Request;
 
 class FamiliaController extends Controller
@@ -13,13 +13,14 @@ class FamiliaController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Familia::with('vivienda.calle.sector');
+        $query = Familia::with('manzana');
 
         if ($request->has('search')) {
             $search = $request->search;
             $query->where('apellidos', 'like', "%{$search}%")
-                  ->orWhereHas('vivienda', function($q) use ($search) {
-                      $q->where('numero_casa', 'like', "%{$search}%");
+                  ->orWhere('numero_casa', 'like', "%{$search}%")
+                  ->orWhereHas('manzana', function($q) use ($search) {
+                      $q->where('nombre', 'like', "%{$search}%");
                   });
         }
 
@@ -33,9 +34,8 @@ class FamiliaController extends Controller
      */
     public function create()
     {
-        // En un caso real, probablemente filtrarías viviendas sin familia asignada o permitirías múltiples
-        $viviendas = Vivienda::with('calle.sector')->get(); 
-        return view('familias.create', compact('viviendas'));
+        $manzanas = Manzana::orderBy('nombre')->get();
+        return view('familias.create', compact('manzanas'));
     }
 
     /**
@@ -45,9 +45,11 @@ class FamiliaController extends Controller
     {
         $validated = $request->validate([
             'apellidos' => 'required|string|max:255',
-            'vivienda_id' => 'nullable|exists:viviendas,id',
+            'manzana_id' => 'required|exists:manzanas,id',
+            'numero_casa' => 'nullable|string|max:255',
+            'calle_transversal' => 'nullable|string|max:255',
             'numero_habitantes' => 'nullable|integer|min:0',
-            'ingreso_mensual_aprox' => 'nullable|numeric|min:0',
+            'numero_habitantes' => 'nullable|integer|min:0',
         ]);
 
         Familia::create($validated);
@@ -69,8 +71,8 @@ class FamiliaController extends Controller
      */
     public function edit(Familia $familia)
     {
-        $viviendas = Vivienda::with('calle.sector')->get();
-        return view('familias.edit', compact('familia', 'viviendas'));
+        $manzanas = Manzana::orderBy('nombre')->get();
+        return view('familias.edit', compact('familia', 'manzanas'));
     }
 
     /**
@@ -80,9 +82,11 @@ class FamiliaController extends Controller
     {
         $validated = $request->validate([
             'apellidos' => 'required|string|max:255',
-            'vivienda_id' => 'nullable|exists:viviendas,id',
+            'manzana_id' => 'required|exists:manzanas,id',
+            'numero_casa' => 'nullable|string|max:255',
+            'calle_transversal' => 'nullable|string|max:255',
             'numero_habitantes' => 'nullable|integer|min:0',
-            'ingreso_mensual_aprox' => 'nullable|numeric|min:0',
+            'numero_habitantes' => 'nullable|integer|min:0',
         ]);
 
         $familia->update($validated);

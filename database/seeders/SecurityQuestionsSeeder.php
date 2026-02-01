@@ -25,7 +25,7 @@ class SecurityQuestionsSeeder extends Seeder
         ];
 
         foreach ($questions as $question) {
-            SecurityQuestion::create(['question' => $question]);
+            SecurityQuestion::firstOrCreate(['question' => $question]);
         }
     }
 }

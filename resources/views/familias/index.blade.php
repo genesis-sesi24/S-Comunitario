@@ -65,12 +65,11 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
                         <div>
-                            @if($familia->vivienda)
-                                <span class="block font-semibold text-slate-700">Casa #{{ $familia->vivienda->numero_casa ?? 'S/N' }}</span>
-                                <span class="text-slate-500 text-xs">{{ $familia->vivienda->calle->nombre ?? '' }} • {{ $familia->vivienda->calle->sector->nombre ?? 'Sin Sector' }}</span>
-                            @else
-                                <span class="text-slate-400 italic">Sin ubicación asignada</span>
-                            @endif
+                            <span class="block font-semibold text-slate-700">Manzana: {{ $familia->manzana->nombre ?? 'N/A' }}</span>
+                            <span class="text-slate-500 text-xs">
+                                Casa: {{ $familia->numero_casa ?? 'S/N' }} 
+                                @if($familia->calle_transversal) • {{ $familia->calle_transversal }} @endif
+                            </span>
                         </div>
                     </div>
 
@@ -86,13 +85,7 @@
                         </div>
                     </div>
                     
-                    {{-- Ingreso --}}
-                    <div class="flex items-center justify-between text-sm pt-2 border-t border-slate-50">
-                        <span class="text-slate-500">Ingreso Aprox.</span>
-                        <span class="font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
-                            {{ $familia->ingreso_mensual_aprox ? '$'.number_format($familia->ingreso_mensual_aprox, 2) : 'N/A' }}
-                        </span>
-                    </div>
+                    {{-- Ingreso Eliminado --}}
                 </div>
 
                 <!-- Footer -->
