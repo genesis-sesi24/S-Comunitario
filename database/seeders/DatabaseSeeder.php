@@ -17,12 +17,20 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => bcrypt('password'), // Asegúrate de establecer contraseña
+                'role' => 'admin', // Asumo rol admin
+            ]
+        );
 
-        // Llamar al seeder de patologías
-        $this->call(PatologiaSeeder::class);
+        // Llamar algar seeder de patologías
+        $this->call([
+            SecurityQuestionsSeeder::class,
+            PatologiaSeeder::class,
+            ManzanaSeeder::class,
+        ]);
     }
 }

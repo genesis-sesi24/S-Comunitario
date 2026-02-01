@@ -10,10 +10,37 @@ use Illuminate\Support\Facades\DB;
 
 class FichaFamiliarController extends Controller
 {
-    public function index(Familia $familia)
+    public function index(Request $request, Familia $familia)
     {
-        $fichas = $familia->fichaFamiliares()->latest()->get();
-        return view('fichas.index', compact('familia', 'fichas'));
+        $query = $familia->fichaFamiliares();
+
+        // Obtener años disponibles para el filtro
+        $years = $familia->fichaFamiliares()
+            ->selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        // Filtrar por año si se selecciona
+        if ($request->filled('year')) {
+            $query->whereYear('created_at', $request->year);
+        }
+
+        // Filtrar por mes si se selecciona
+        if ($request->filled('month')) {
+            $query->whereMonth('created_at', $request->month);
+        }
+
+        $fichas = $query->latest()->get();
+        
+        // Nombres de los meses en español
+        $months = [
+            1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
+            5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
+            9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
+        ];
+        
+        return view('fichas.index', compact('familia', 'fichas', 'years', 'months'));
     }
 
     public function create(Familia $familia)

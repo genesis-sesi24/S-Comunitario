@@ -96,7 +96,7 @@
                 </h1>
 
                 <p class="text-xl text-slate-600 mb-12 max-w-2xl mx-auto leading-relaxed font-light animate-fade-in-up" style="animation-delay: 200ms;">
-                    Plataforma moderna para la administración de familias, sectores y servicios comunitarios. Eficiencia y transparencia en un solo lugar.
+                    Plataforma moderna para la administración de familias, manzanas y servicios comunitarios. Eficiencia y transparencia en un solo lugar.
                 </p>
 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style="animation-delay: 300ms;">
@@ -125,7 +125,7 @@
                     </div>
                     <div class="text-center">
                         <p class="stat-number mb-1">5+</p>
-                        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Sectores</p>
+                        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Manzanas</p>
                     </div>
                 </div>
             </div>
@@ -169,7 +169,7 @@
                         </div>
                         <h3 class="text-xl font-bold text-slate-900 mb-3">Control Territorial</h3>
                         <p class="text-slate-600 leading-relaxed mb-6">
-                            Organización precisa por sectores, calles y viviendas para un mapeo exacto de la comunidad.
+                            Organización precisa por manzanas y viviendas para un mapeo exacto de la comunidad.
                         </p>
                         <a href="#" class="text-sm font-semibold text-slate-900 hover:text-teal-700 transition-colors flex items-center gap-1 group">
                             Saber más <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
@@ -230,7 +230,7 @@
                             </div>
                             <div class="md:w-[45%] pl-10 md:pl-0">
                                 <h3 class="text-2xl font-bold text-slate-900 mb-2 group-hover:text-teal-700 transition-colors">2. Configuración</h3>
-                                <p class="text-slate-600">Parametrización de calles, sectores y consejos comunales.</p>
+                                <p class="text-slate-600">Parametrización de manzanas, consejos comunales y áreas de servicio.</p>
                             </div>
                         </div>
 

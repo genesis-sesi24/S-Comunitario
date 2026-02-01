@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Patologia;
 use App\Models\Familia;
 use App\Models\User;
-use App\Models\Sector;
+use App\Models\Manzana;
 use App\Models\FichaFamiliar;
 use App\Models\Integrante;
 
@@ -32,7 +32,7 @@ class HomeController extends Controller
         $stats = [
             'familias' => Familia::count(),
             'usuarios' => User::count(),
-            'sectores' => Sector::count(),
+            'sectores' => Manzana::count(),
             'fichas' => FichaFamiliar::count(),
             'integrantes' => Integrante::count(),
             'nuevas_familias_mes' => Familia::whereMonth('created_at', now()->month)->count(),
