@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         // Llamar algar seeder de patologías
         $this->call([
             SecurityQuestionsSeeder::class,
-            PatologiaSeeder::class,
+            TipoPatologiaSeeder::class, // Updated to use the new seeder
             ManzanaSeeder::class,
         ]);
     }

@@ -1,0 +1,1 @@
+@include('patologias.registros.create')
