@@ -158,6 +158,11 @@
                 Manzanas
             </a>
 
+            <a href="{{ route('patologias.tipos.index') }}" class="sidebar-link flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all {{ request()->routeIs('patologias.*') ? 'sidebar-active' : 'text-slate-600' }}">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Patologías
+            </a>
+
             <p class="px-3 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Administración</p>
 
             <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all {{ request()->routeIs('users.*') ? 'sidebar-active' : 'text-slate-600' }}">
@@ -228,5 +233,27 @@
     </script>
     @yield('scripts')
     <x-toast />
+
+    <!-- Tailwind Safelist for Dynamic Colors -->
+    <div class="hidden">
+        @foreach(['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple', 'pink'] as $color)
+            <!-- These are not parsed by Tailwind in loop, but here for manual reference if needed. 
+                 The static strings below ARE parsed. -->
+        @endforeach
+        
+        <!-- Generated Safelist -->
+        <span class="text-red-600 hover:text-red-600 bg-red-50 border-red-100 focus:ring-red-500 focus:border-red-500 bg-red-600 hover:bg-red-700 shadow-red-500 text-red-500 border-red-500 ring-red-500"></span>
+        <span class="text-orange-600 hover:text-orange-600 bg-orange-50 border-orange-100 focus:ring-orange-500 focus:border-orange-500 bg-orange-600 hover:bg-orange-700 shadow-orange-500 text-orange-500 border-orange-500 ring-orange-500"></span>
+        <span class="text-yellow-600 hover:text-yellow-600 bg-yellow-50 border-yellow-100 focus:ring-yellow-500 focus:border-yellow-500 bg-yellow-600 hover:bg-yellow-700 shadow-yellow-500 text-yellow-500 border-yellow-500 ring-yellow-500"></span>
+        <span class="text-green-600 hover:text-green-600 bg-green-50 border-green-100 focus:ring-green-500 focus:border-green-500 bg-green-600 hover:bg-green-700 shadow-green-500 text-green-500 border-green-500 ring-green-500"></span>
+        <span class="text-blue-600 hover:text-blue-600 bg-blue-50 border-blue-100 focus:ring-blue-500 focus:border-blue-500 bg-blue-600 hover:bg-blue-700 shadow-blue-500 text-blue-500 border-blue-500 ring-blue-500"></span>
+        <span class="text-indigo-600 hover:text-indigo-600 bg-indigo-50 border-indigo-100 focus:ring-indigo-500 focus:border-indigo-500 bg-indigo-600 hover:bg-indigo-700 shadow-indigo-500 text-indigo-500 border-indigo-500 ring-indigo-500"></span>
+        <span class="text-purple-600 hover:text-purple-600 bg-purple-50 border-purple-100 focus:ring-purple-500 focus:border-purple-500 bg-purple-600 hover:bg-purple-700 shadow-purple-500 text-purple-500 border-purple-500 ring-purple-500"></span>
+        <span class="text-pink-600 hover:text-pink-600 bg-pink-50 border-pink-100 focus:ring-pink-500 focus:border-pink-500 bg-pink-600 hover:bg-pink-700 shadow-pink-500 text-pink-500 border-pink-500 ring-pink-500"></span>
+        
+        <!-- Additional variations used in create form -->
+        <span class="bg-red-500 bg-orange-500 bg-amber-400 bg-emerald-500 bg-blue-500 bg-indigo-500 bg-purple-500 bg-pink-500"></span>
+        <span class="hover:border-red-200 hover:border-orange-200 hover:border-yellow-200 hover:border-green-200 hover:border-blue-200 hover:border-indigo-200 hover:border-purple-200 hover:border-pink-200"></span>
+    </div>
 </body>
 </html>

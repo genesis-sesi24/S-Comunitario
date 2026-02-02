@@ -40,4 +40,24 @@ Route::middleware('auth')->group(function () {
     Route::post('profile/theme', [App\Http\Controllers\ProfileController::class, 'updateTheme'])->name('profile.theme');
     Route::post('profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('profile/security', [App\Http\Controllers\ProfileController::class, 'updateSecurity'])->name('profile.security');
+
+    // Pathology Management Routes
+    // Gestión de Tipos de Patologías (Admin)
+    Route::resource('patologias/tipos', App\Http\Controllers\TipoPatologiaController::class)->names('patologias.tipos');
+    
+    // Field Management for Pathology Types
+    Route::post('patologias/tipos/{tipo}/campos', [App\Http\Controllers\PatologiaCampoController::class, 'store'])->name('patologias.campos.store');
+    Route::put('patologias/campos/{campo}', [App\Http\Controllers\PatologiaCampoController::class, 'update'])->name('patologias.campos.update');
+    Route::delete('patologias/campos/{campo}', [App\Http\Controllers\PatologiaCampoController::class, 'destroy'])->name('patologias.campos.destroy');
+    
+    // CRUD de Registros de Patologías (Genérico para cualquier tipo)
+    Route::get('patologias/{tipo}', [App\Http\Controllers\PatologiaRegistroController::class, 'index'])->name('patologias.index');
+    Route::get('patologias/{tipo}/create', [App\Http\Controllers\PatologiaRegistroController::class, 'create'])->name('patologias.create');
+    Route::post('patologias/{tipo}', [App\Http\Controllers\PatologiaRegistroController::class, 'store'])->name('patologias.store');
+    Route::get('patologias/{tipo}/{id}', [App\Http\Controllers\PatologiaRegistroController::class, 'show'])->name('patologias.show');
+    Route::get('patologias/{tipo}/{id}/edit', [App\Http\Controllers\PatologiaRegistroController::class, 'edit'])->name('patologias.edit');
+    Route::put('patologias/{tipo}/{id}', [App\Http\Controllers\PatologiaRegistroController::class, 'update'])->name('patologias.update');
+    Route::delete('patologias/{tipo}/{id}', [App\Http\Controllers\PatologiaRegistroController::class, 'destroy'])->name('patologias.destroy');
+    Route::get('patologias/{tipo}/{id}/pdf', [App\Http\Controllers\PatologiaRegistroController::class, 'exportPdf'])->name('patologias.pdf');
+    Route::get('patologias/{tipo}/export/excel', [App\Http\Controllers\PatologiaRegistroController::class, 'exportExcel'])->name('patologias.export.excel');
 });
